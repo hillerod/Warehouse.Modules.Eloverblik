@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <OutputType>Library</OutputType>
+    <StartupObject />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--<PackageReference Include="Bygdrift.Warehouse" Version="0.5.1" />-->
+    <PackageReference Include="Bygdrift.Warehouse" Version="0.6.0-alpha2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+    <PackageReference Include="Moq" Version="4.16.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.2.8">
+      <TreatAsUsed>true</TreatAsUsed>
+    </PackageReference>
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.8" />
+    <PackageReference Include="coverlet.collector" Version="3.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <!--For testing of bygdrift.Warehouse-->
+	  <!--<Reference Include="Bygdrift.Warehouse">
+		  <HintPath>..\..\..\..\..\Bygdrift\Warehouse\Warehouse\bin\Debug\net6.0\Bygdrift.Warehouse.dll</HintPath>
+	  </Reference>--> 
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Module\Module.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="appsettings.local.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Files\Out\" />
+  </ItemGroup>
+
+</Project>
