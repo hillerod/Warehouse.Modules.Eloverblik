@@ -58,16 +58,6 @@ namespace Module.AppFunctions
             return false;
         }
 
-        public static void VerifyAppSetting(AppBase app)
-        {
-            app.VerifyAppSettings(
-                 ("EloverblikToken", "", true),
-                 ("MonthsToKeepReadingsPerHour", "This is not set, and 6 will be used as standard", false),
-                 ("MonthsToKeepReadingsPerDay", "This is not set, and 60 will be used as standard", false),
-                 ("MonthsToKeepReadingsPerMonth", "This is not set, and 120 will be used as standard", false)
-             );
-        }
-
         public static async Task<int> TerminateInstances(IDurableClient client)
         {
             var existingInstances = await client.ListInstancesAsync(new OrchestrationStatusQueryCondition

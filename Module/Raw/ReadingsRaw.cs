@@ -12,15 +12,15 @@ namespace Module.Raw
     public class ReadingsRaw
     {
         private readonly WebService service;
-        private readonly AppBase app;
+        private readonly AppBase<Settings> app;
 
         /// <summary>
         /// Loads all reads from Eloverblik and into dataLake
         /// </summary>
-        public ReadingsRaw(AppBase app)
+        public ReadingsRaw(AppBase<Settings> app)
         {
             this.app = app;
-            service = new WebService(app.Config["EloverblikToken"], app.Log);
+            service = new WebService(app.Settings.Token, app.Log);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Module.Raw
             if (groups == null || !groups.Any())
                 return res;
 
-            var readingGroups = GroupReadPartitions(GetMinLimit(app.Now, aggregation), app.Now, groups, idsPerGroup, GetDaysOverlap(aggregation));
+            var readingGroups = GroupReadPartitions(GetMinLimit(app.LoadedLocal, aggregation), app.LoadedLocal, groups, idsPerGroup, GetDaysOverlap(aggregation));
 
             var tasks = new List<Task<(string Json, string[] Ids)>>();
             foreach (var item in readingGroups)
@@ -90,7 +90,7 @@ namespace Module.Raw
                     res.Add((true, null, item.Ids));
 
             await Task.WhenAny(Task.WhenAll(tasks), Task.Delay(cancelMethodCallAfter));
-            var error = app.Log.GetErrors();
+            var error = app.Log.GetErrorsAndCriticals();
             foreach (var item in tasks.Where(t => t.Status == TaskStatus.RanToCompletion).Select(t => t.Result))
                 res.Add((true, item.Json, item.Ids));
 
@@ -159,11 +159,11 @@ namespace Module.Raw
 
         private int GetMonthsToKeepData(TimeAggregation aggregration) => aggregration switch
         {
-            TimeAggregation.Day => int.TryParse(app.Config["MonthsToKeepReadingsPerDay"], out int res) ? res : 60,
-            TimeAggregation.Hour => int.TryParse(app.Config["MonthsToKeepReadingsPerHour"], out int res) ? res : 6,
-            TimeAggregation.Month => int.TryParse(app.Config["MonthsToKeepReadingsPerMonth"], out int res) ? res : 120,
-            TimeAggregation.Quarter => int.TryParse(app.Config["MonthsToKeepReadingsPerMonth"], out int res) ? res : 120,
-            TimeAggregation.Year => int.TryParse(app.Config["MonthsToKeepReadingsPerMonth"], out int res) ? res : 120,
+            TimeAggregation.Day => app.Settings.MonthsToKeepReadingsPerDay,
+            TimeAggregation.Hour => app.Settings.MonthsToKeepReadingsPerHour,
+            TimeAggregation.Month => app.Settings.MonthsToKeepReadingsPerMonth,
+            TimeAggregation.Quarter => app.Settings.MonthsToKeepReadingsPerMonth,
+            TimeAggregation.Year => app.Settings.MonthsToKeepReadingsPerMonth,
             _ => throw new NotImplementedException()
         };
 

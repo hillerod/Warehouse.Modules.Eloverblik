@@ -33,7 +33,7 @@ namespace ModuleTests.AppFunctions
             TimerTrigger.MeteringsToLoad = 40;
         }
 
-        public List<string> Errors { get { return TimerTrigger.App.Log.GetErrors().ToList(); } }
+        public List<string> Errors { get { return TimerTrigger.App.Log.GetErrorsAndCriticals().ToList(); } }
 
         [TestMethod]
         public async Task PureRestart()
@@ -48,7 +48,7 @@ namespace ModuleTests.AppFunctions
         [TestMethod]
         public async Task GoTwoDaysBack()
         {
-            var param = new { From = TimerTrigger.App.Now.AddYears(-10).Date, To = TimerTrigger.App.Now.AddDays(-2).Date };
+            var param = new { From = TimerTrigger.App.LoadedUtc.AddYears(-10).Date, To = TimerTrigger.App.LoadedUtc.AddDays(-2).Date };
             var sql = $"UPDATE [{TimerTrigger.App.ModuleName}].[Meterings] SET" +
                 " dataPerDayFrom = @From, dataPerDayTo = @To," +
                 " dataPerMonthFrom = @From, dataPerMonthTo = @To," +

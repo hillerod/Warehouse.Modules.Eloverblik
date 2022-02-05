@@ -11,13 +11,13 @@ namespace Module.Refines
     public class ReadingsRefine
     {
         private readonly string shortTimeAggregation;
-        private readonly AppBase app;
+        private readonly AppBase<Settings> app;
         private readonly string tableName;
         public readonly TimeAggregation TimeAggregation;
         public List<string> MeteringPointIds = new();
         public Csv Csv;
 
-        public ReadingsRefine(AppBase app, string tableName, string datalakePath, TimeAggregation timeAggregation)
+        public ReadingsRefine(AppBase<Settings> app, string tableName, string datalakePath, TimeAggregation timeAggregation)
         {
             this.app = app;
             this.tableName = tableName;
@@ -49,7 +49,7 @@ namespace Module.Refines
             meteringUpdatesCsv.AddHeader($"dataPer{TimeAggregation}To");
             var minLimit = GetMinLimit(app, TimeAggregation).Date;
             foreach (var item in MeteringPointIds)
-                meteringUpdatesCsv.AddRow(item, minLimit, app.Now.Date);
+                meteringUpdatesCsv.AddRow(item, minLimit, app.LoadedLocal.Date);
 
             app.Mssql.MergeCsv(meteringUpdatesCsv, "Meterings", "meteringPointId", false, false);
         }
@@ -59,19 +59,19 @@ namespace Module.Refines
             app.Mssql.RemoveOldRows(tableName, "timeintervalStart", GetMinLimit(app, TimeAggregation));
         }
 
-        private static int GetMonthsToKeepData(AppBase app, TimeAggregation aggregration) => aggregration switch
+        private static int GetMonthsToKeepData(AppBase<Settings> app, TimeAggregation aggregration) => aggregration switch
         {
-            TimeAggregation.Day => int.TryParse(app.Config["MonthsToKeepReadingsPerDay"], out int res) ? res : 60,
-            TimeAggregation.Hour => int.TryParse(app.Config["MonthsToKeepReadingsPerHour"], out int res) ? res : 6,
-            TimeAggregation.Month => int.TryParse(app.Config["MonthsToKeepReadingsPerMonth"], out int res) ? res : 120,
-            TimeAggregation.Quarter => int.TryParse(app.Config["MonthsToKeepReadingsPerMonth"], out int res) ? res : 120,
-            TimeAggregation.Year => int.TryParse(app.Config["MonthsToKeepReadingsPerMonth"], out int res) ? res : 120,
+            TimeAggregation.Day => app.Settings.MonthsToKeepReadingsPerDay,
+            TimeAggregation.Hour => app.Settings.MonthsToKeepReadingsPerHour,
+            TimeAggregation.Month => app.Settings.MonthsToKeepReadingsPerMonth,
+            TimeAggregation.Quarter => app.Settings.MonthsToKeepReadingsPerMonth,
+            TimeAggregation.Year => app.Settings.MonthsToKeepReadingsPerMonth,
             _ => throw new NotImplementedException()
         };
 
-        private static DateTime GetMinLimit(AppBase app, TimeAggregation aggregration)
+        private static DateTime GetMinLimit(AppBase<Settings> app, TimeAggregation aggregration)
         {
-            return app.Now.AddMonths(-GetMonthsToKeepData(app, aggregration));
+            return app.LoadedLocal.AddMonths(-GetMonthsToKeepData(app, aggregration));
         }
 
         public void CreateCsv(TimeAggregation timeAggregation, IEnumerable<MeteringReading> data)
@@ -85,18 +85,18 @@ namespace Module.Refines
             else if (timeAggregation == TimeAggregation.Month)
                 records = TimeAggregationPerMonth(data);
 
-            var r = 0;
+            var r = 1;
             foreach (var record in records)
             {
-                Csv.AddRecord(r, 0, record.Id);
-                Csv.AddRecord(r, 1, record.PointId);
-                Csv.AddRecord(r, 2, record.BusinessType);
-                Csv.AddRecord(r, 3, record.UnitName);
-                Csv.AddRecord(r, 4, record.Resolution);
-                Csv.AddRecord(r, 5, record.StartDanishTime);
-                Csv.AddRecord(r, 6, record.EndDanishTime);
-                Csv.AddRecord(r, 7, Math.Round(record.Quantity, 2));
-                Csv.AddRecord(r, 8, record.Quality);
+                Csv.AddRecord(r, 1, record.Id);
+                Csv.AddRecord(r, 2, record.PointId);
+                Csv.AddRecord(r, 3, record.BusinessType);
+                Csv.AddRecord(r, 4, record.UnitName);
+                Csv.AddRecord(r, 5, record.Resolution);
+                Csv.AddRecord(r, 6, record.StartDanishTime);
+                Csv.AddRecord(r, 7, record.EndDanishTime);
+                Csv.AddRecord(r, 8, Math.Round(record.Quantity, 2));
+                Csv.AddRecord(r, 9, record.Quality);
                 r++;
             }
         }

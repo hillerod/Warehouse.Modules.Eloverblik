@@ -6,6 +6,11 @@
     }
   },
   "logging": {
+    "logLevel": {
+      "Module.AppFunctions.TimerTrigger": "Information",
+      "Module.AppFunctions.Basic": "Information"
+      //"default": "Information"  //Better to use Namespace.Class.Method, instead of this because it returns a lot information
+    },
     "applicationInsights": {
       "samplingSettings": {
         "isEnabled": true,

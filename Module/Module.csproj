@@ -3,7 +3,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<AzureFunctionsVersion>v4</AzureFunctionsVersion>
 		<OutputType>Library</OutputType>
-		<Version>1.1.7</Version>
+		<Version>1.2.0</Version>
 		<PackageId>Hillerod.Warehouse.Modules.Eloverblik</PackageId>
 		<Authors>Kenboc</Authors>
 		<Company>Hillerod</Company>
@@ -11,15 +11,22 @@
 		<StartupObject />
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Bygdrift.Warehouse" Version="0.6.0-alpha2" />
+		<PackageReference Include="Bygdrift.Warehouse" Version="0.6.2" />
 		<PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />		
 		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.DurableTask" Version="2.6.0" />
 		<PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.0.1" />
+		
 		<!--For testing of bygdrift.Warehouse-->
-		<!--<PackageReference Include="RepoDb.SqlServer.BulkOperations" Version="1.1.5" />
+		<!--<PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.2.0" />
 		<PackageReference Include="Azure.Storage.Files.DataLake" Version="12.8.0" />
 		<PackageReference Include="ClosedXML" Version="0.95.4" />
 		<PackageReference Include="ExcelDataReader" Version="3.6.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+		<PackageReference Include="RepoDb.SqlServer.BulkOperations" Version="1.1.5" />
+
 		<Reference Include="Bygdrift.Warehouse">
 			<HintPath>..\..\..\..\..\Bygdrift\Warehouse\Warehouse\bin\Debug\net6.0\Bygdrift.Warehouse.dll</HintPath>
 		</Reference>-->

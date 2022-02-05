@@ -19,7 +19,7 @@ namespace Module.Refines
                 return;
 
             MeteringIds = meteringDetails.Select(o => o.meteringPointId).ToArray();
-            CreateCsv(meteringsFromDb, meteringDetails, app.Now);
+            CreateCsv(meteringsFromDb, meteringDetails);
             app.Mssql.MergeCsv(Csv, "Meterings", "meteringPointId", false, false);
         }
 
@@ -27,13 +27,13 @@ namespace Module.Refines
 
         public List<ReadPartition> ReadPartitionsFromDb { get; private set; }
 
-        public void CreateCsv(Csv fromDb, IEnumerable<MeteringDetail> details, DateTime now)
+        public void CreateCsv(Csv fromDb, IEnumerable<MeteringDetail> details)
         {
             Csv = new Csv(
                 "meteringPointId, typeOfMP, balanceSupplierName, streetName, buildingNumber, floorId, roomId, postcode, cityName, locationDescription, meterReadingOccurrence, firstConsumerPartyName, secondConsumerPartyName, consumerCVR, dataAccessCVR, meterNumber, consumerStartDate, parentPointId," +
                 "energyTimeSeriesMeasureUnit, estimatedAnnualVolume, gridOperator, balanceSupplierStartDate, physicalStatusOfMP, subTypeOfMP, meterCounterMultiplyFactor, meterCounterUnit");
 
-            var r = 0;
+            var r = 1;
             int colDataPerHourFrom = -1;
             int colDataPerHourTo = -1;
             int colDataPerDayFrom = -1;
@@ -57,24 +57,24 @@ namespace Module.Refines
                 ReadPartitionsFromDb.Add(new ReadPartition(point.meteringPointId, GetRecordDate(dbRow, colDataPerDayFrom, true), GetRecordDate(dbRow, colDataPerDayTo, true), TimeAggregation.Day));
                 ReadPartitionsFromDb.Add(new ReadPartition(point.meteringPointId, GetRecordDate(dbRow, colDataPerMonthFrom, true), GetRecordDate(dbRow, colDataPerMonthTo, true), TimeAggregation.Month));
 
-                Csv.AddRecord(r, 0, point.meteringPointId);
-                Csv.AddRecord(r, 1, point.typeOfMP);
-                Csv.AddRecord(r, 2, point.balanceSupplierName);
-                Csv.AddRecord(r, 3, point.streetName);
-                Csv.AddRecord(r, 4, point.buildingNumber);
-                Csv.AddRecord(r, 5, point.floorId);
-                Csv.AddRecord(r, 6, point.roomId);
-                Csv.AddRecord(r, 7, point.postcode);
-                Csv.AddRecord(r, 8, point.cityName);
-                Csv.AddRecord(r, 9, point.locationDescription);
-                Csv.AddRecord(r, 10, point.meterReadingOccurrence);
-                Csv.AddRecord(r, 11, point.firstConsumerPartyName);
-                Csv.AddRecord(r, 12, point.secondConsumerPartyName);
-                Csv.AddRecord(r, 13, point.consumerCVR);
-                Csv.AddRecord(r, 14, point.dataAccessCVR);
-                Csv.AddRecord(r, 15, point.meterNumber);
+                Csv.AddRecord(r, 1, point.meteringPointId);
+                Csv.AddRecord(r, 2, point.typeOfMP);
+                Csv.AddRecord(r, 3, point.balanceSupplierName);
+                Csv.AddRecord(r, 4, point.streetName);
+                Csv.AddRecord(r, 5, point.buildingNumber);
+                Csv.AddRecord(r, 6, point.floorId);
+                Csv.AddRecord(r, 7, point.roomId);
+                Csv.AddRecord(r, 8, point.postcode);
+                Csv.AddRecord(r, 9, point.cityName);
+                Csv.AddRecord(r, 10, point.locationDescription);
+                Csv.AddRecord(r, 11, point.meterReadingOccurrence);
+                Csv.AddRecord(r, 12, point.firstConsumerPartyName);
+                Csv.AddRecord(r, 13, point.secondConsumerPartyName);
+                Csv.AddRecord(r, 14, point.consumerCVR);
+                Csv.AddRecord(r, 15, point.dataAccessCVR);
+                Csv.AddRecord(r, 16, point.meterNumber);
 
-                Csv.AddRecord(r, 16, point.consumerStartDate.ToString("s"));
+                Csv.AddRecord(r, 17, point.consumerStartDate.ToString("s"));
                 //Details:
                 Csv.AddRecord(r, 18, point.energyTimeSeriesMeasureUnit);
                 Csv.AddRecord(r, 19, point.estimatedAnnualVolume);
@@ -88,24 +88,24 @@ namespace Module.Refines
 
                 foreach (var childPoint in point.childMeteringPoints)
                 {
-                    Csv.AddRecord(r, 0, childPoint.meteringPointId);
-                    Csv.AddRecord(r, 1, childPoint.typeOfMP);
-                    Csv.AddRecord(r, 2, point.balanceSupplierName);
-                    Csv.AddRecord(r, 3, point.streetName);
-                    Csv.AddRecord(r, 4, point.buildingNumber);
-                    Csv.AddRecord(r, 5, point.floorId);
-                    Csv.AddRecord(r, 6, point.roomId);
-                    Csv.AddRecord(r, 7, point.postcode);
-                    Csv.AddRecord(r, 8, point.cityName);
-                    Csv.AddRecord(r, 9, point.locationDescription);
-                    Csv.AddRecord(r, 10, childPoint.meterReadingOccurrence);
-                    Csv.AddRecord(r, 11, point.firstConsumerPartyName);
-                    Csv.AddRecord(r, 12, point.secondConsumerPartyName);
-                    Csv.AddRecord(r, 13, point.consumerCVR);
-                    Csv.AddRecord(r, 14, point.dataAccessCVR);
-                    Csv.AddRecord(r, 15, childPoint.meterNumber);
-                    Csv.AddRecord(r, 16, point.consumerStartDate.ToString("s"));
-                    Csv.AddRecord(r, 17, point.meteringPointId);
+                    Csv.AddRecord(r, 1, childPoint.meteringPointId);
+                    Csv.AddRecord(r, 2, childPoint.typeOfMP);
+                    Csv.AddRecord(r, 3, point.balanceSupplierName);
+                    Csv.AddRecord(r, 4, point.streetName);
+                    Csv.AddRecord(r, 5, point.buildingNumber);
+                    Csv.AddRecord(r, 6, point.floorId);
+                    Csv.AddRecord(r, 7, point.roomId);
+                    Csv.AddRecord(r, 8, point.postcode);
+                    Csv.AddRecord(r, 9, point.cityName);
+                    Csv.AddRecord(r, 10, point.locationDescription);
+                    Csv.AddRecord(r, 11, childPoint.meterReadingOccurrence);
+                    Csv.AddRecord(r, 12, point.firstConsumerPartyName);
+                    Csv.AddRecord(r, 13, point.secondConsumerPartyName);
+                    Csv.AddRecord(r, 14, point.consumerCVR);
+                    Csv.AddRecord(r, 15, point.dataAccessCVR);
+                    Csv.AddRecord(r, 16, childPoint.meterNumber);
+                    Csv.AddRecord(r, 17, point.consumerStartDate.ToString("s"));
+                    Csv.AddRecord(r, 18, point.meteringPointId);
                     r++;
                 }
             }

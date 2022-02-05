@@ -8,8 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!--<PackageReference Include="Bygdrift.Warehouse" Version="0.5.1" />-->
-    <PackageReference Include="Bygdrift.Warehouse" Version="0.6.0-alpha2" />
+    <PackageReference Include="Bygdrift.Warehouse" Version="0.6.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.8">
@@ -35,7 +34,7 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="appsettings.local.json">
+    <None Update="appsettings.Development.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

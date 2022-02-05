@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "Token": {
+            "value": "A token downloaded from Eloverblik"
+        },
+        "MonthsToKeepReadingsPerHour": {
+            "value": 6
+        },
+        "MonthsToKeepReadingsPerDay": {
+            "value": 60
+        },
+        "MonthsToKeepReadingsPerMonth": {
+            "value": 120
+        },
+        "ModuleName": {
+            "value": "Eloverblik"
+        },
+        "StarterScheduleExpression": {
+            "value": "0 0 1 * * *"
+        },
+        "TimeZoneId": {
+            "value": "Romance Standard Time"
+        }
+    }
+}

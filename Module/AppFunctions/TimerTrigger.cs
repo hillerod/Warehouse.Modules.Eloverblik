@@ -22,8 +22,8 @@ namespace Module.AppFunctions
         {
             if (App == null)
             {
-                App = new AppBase(logger);
-                App.Log.LogInformation("Created a new Appbase at: {Now}", App.Now);
+                App = new AppBase<Settings>(logger);
+                App.Log.LogInformation("Created a new Appbase at: {Now}", App.LoadedLocal);
             }
 
             if (Client == null)
@@ -32,20 +32,19 @@ namespace Module.AppFunctions
             MeteringsToLoad = int.MaxValue;
         }
 
-        public static AppBase App { get; private set; }
+        public static AppBase<Settings> App { get; private set; }
         public static IDurableClient Client { get; private set; }
         public static int MeteringsToLoad { get; set; }
 
         [FunctionName(nameof(Starter))]
-        public async Task Starter([TimerTrigger("%Schedule%"
+        public async Task Starter([TimerTrigger("%StarterScheduleExpression%"
 #if DEBUG
             ,RunOnStartup = true
 #endif
             )] TimerInfo timerInfo)
         {
             if (await Basic.IsRunning(App, Client)) return;
-            var now = DateTime.Now;
-            Basic.VerifyAppSetting(App);
+            App.LoadedUtc = DateTime.UtcNow;
             App.Config["QualifiedInstanceId"] = await Client.StartNewAsync(nameof(RunOrchestrator));
         }
 
@@ -96,7 +95,7 @@ namespace Module.AppFunctions
             }
 
             await context.CallActivityAsync(nameof(CleanDatabase), null);
-            App.Log.LogInformation($"Finished reading in {context.CurrentUtcDateTime.ToLocalTime().Subtract(App.Now).TotalSeconds / 60} minutes.");
+            App.Log.LogInformation($"Finished reading in {context.CurrentUtcDateTime.Subtract(App.LoadedUtc).TotalSeconds / 60} minutes.");
         }
 
         [FunctionName(nameof(GetMeteringsAndSaveToDatabaseAsync))]
@@ -104,7 +103,7 @@ namespace Module.AppFunctions
         {
             if (!Basic.IsQualifiedInstance(App, context.InstanceId)) return default;
             var meteringsFromDb = App.Mssql.GetAsCsv("Meterings");
-            var service = new WebService(App.Config["EloverblikToken"], App.Log);
+            var service = new WebService(App.Settings.Token, App.Log);
             if (!App.DataLake.GetJson("Raw", "MeteringIds.json", FolderStructure.DatePath, out string[] meteringIds))
             {
                 meteringIds = await service.GetMeteringPointIdsAsync();
@@ -192,7 +191,10 @@ namespace Module.AppFunctions
         [FunctionName(nameof(CleanDatabase))]
         public void CleanDatabase([ActivityTrigger] IDurableActivityContext context)
         {
-            if (!Basic.IsQualifiedInstance(App, context.InstanceId)) return;
+            if (!Basic.IsQualifiedInstance(App, context.InstanceId))
+                return;
+
+            App.Log.LogInformation("Removing old data from database...");
 
             new ReadingsRefine(App, "DataPerMonth", null, TimeAggregation.Month).RemoveExpiredRowsFromDatabase();
             new ReadingsRefine(App, "DataPerDay", null, TimeAggregation.Day).RemoveExpiredRowsFromDatabase();
