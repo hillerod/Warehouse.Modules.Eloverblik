@@ -24,8 +24,8 @@ By saving data to a MS SQL database, it is:
 
 Short video on how to setup a Bygdrift Warehouse and install the Eloverblik Module without deeper explanations (it's in English):
 <div align="left">
-      <a href="https://www.youtube.com/watch?v=1WjdXvB-veo">
-         <img src="https://img.youtube.com/vi/1WjdXvB-veo/0.jpg">
+      <a href="https://www.youtube.com/watch?v=PUgLiGKdE2E">
+         <img src="https://img.youtube.com/vi/PUgLiGKdE2E/0.jpg">
       </a>
 </div>
 

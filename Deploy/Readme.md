@@ -8,7 +8,7 @@ Install the [Warehouse environment](https://github.com/Bygdrift/Warehouse/tree/m
 
 ## Videos
 
-2022-01-28: [Short video on how to setup a Bygdrift Warehouse and install the Eloverblik Module without deeper explanations](https://www.youtube.com/watch?v=1WjdXvB-veo) (it's in English):
+2022-01-28: [Short video on how to setup a Bygdrift Warehouse and install the Eloverblik Module without deeper explanations](https://www.youtube.com/watch?v=PUgLiGKdE2E) (it's in English):
 
 2022-01-28: [Setup the basic Bygdrift Warehouse](https://www.youtube.com/watch?v=6aR39glybhg) (in Danish):
 
