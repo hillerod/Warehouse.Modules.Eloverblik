@@ -22,6 +22,13 @@ By saving data to a MS SQL database, it is:
 - easy to control who has access to what - actually, it can be controlled with AD so you don't have to handle credentials
 - It's cheap
 
+Short video on how to setup a Bygdrift Warehouse and install the Eloverblik Module without deeper explanations (it's in English):
+<div align="left">
+      <a href="https://www.youtube.com/watch?v=1WjdXvB-veo">
+         <img src="https://img.youtube.com/vi/1WjdXvB-veo/0.jpg">
+      </a>
+</div>
+
 ## Installation
 
 All modules can be installed and facilitated with ARM templates (Azure Resource Management): [Use ARM templates to setup and maintain this module](https://github.com/hillerod/Warehouse.Modules.Eloverblik/tree/master/Deploy).
