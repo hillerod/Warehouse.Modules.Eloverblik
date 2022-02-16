@@ -29,6 +29,8 @@ Short video on how to setup a Bygdrift Warehouse and install the Eloverblik Modu
       </a>
 </div>
 
+2021-11-04: [Combine data from Eloverblik and Dalux FM in Microsoft Power BI](https://youtu.be/wR0epPgs438) (in English):
+
 ## Installation
 
 All modules can be installed and facilitated with ARM templates (Azure Resource Management): [Use ARM templates to setup and maintain this module](https://github.com/hillerod/Warehouse.Modules.Eloverblik/tree/master/Deploy).
